@@ -8,49 +8,6 @@ logging.basicConfig(filename='LibraryArchive.txt',
                     format='%(asctime)s - %(message)s')
 
 
-class MultimediaItem:
-
-    def __init__(self, title, release_year, genre, views=0):
-        self.title = title
-        self.release_year = release_year
-        self.genre = genre
-        self.views = views
-
-    def play(self, views_to_add=1):
-        self.views += views_to_add
-        Library.total_views += views_to_add
-        logging.info(f"Played {self.format_title()}. Total views: {Library.total_views}")
-
-    def format_title(self):
-        return f"{self.title} ({self.release_year})"
-
-    def __str__(self):
-        return f"{self.format_title()} - {self.views} views"
-
-
-class Movie(MultimediaItem):
-
-    def format_title(self):
-        return f"{self.title} ({self.release_year})"
-
-    def __str__(self):
-        return f"{self.format_title()} - {self.views} views"
-
-
-class Series(MultimediaItem):
-
-    def __init__(self, title, release_year, genre, season_number, episode_number, views=0):
-        super().__init__(title, release_year, genre, views)
-        self.season_number = season_number
-        self.episode_number = episode_number
-
-    def format_title(self):
-        return f"{self.title} S{self.season_number:02d}E{self.episode_number:02d}"
-
-    def __str__(self):
-        return f"{self.format_title()} - {self.views} views"
-
-
 class Library:
     total_views = 0
 
@@ -97,6 +54,41 @@ class Library:
 
         sorted_items = sorted(items, key=lambda x: x.views, reverse=True)
         return sorted_items[:num_titles]
+
+
+class Movie(Library):
+
+    def __init__(self, title, release_year, genre, views=0):
+        super().__init__()
+        self.title = title
+        self.release_year = release_year
+        self.genre = genre
+        self.views = views
+
+    def play(self, views_to_add=1):
+        self.views += views_to_add
+        Library.total_views += views_to_add
+        logging.info(f"Played {self.format_title()}. Total views: {Library.total_views}")
+
+    def format_title(self):
+        return f"{self.title} ({self.release_year})"
+
+    def __str__(self):
+        return f"{self.format_title()} - {self.views} views"
+
+
+class Series(Movie):
+
+    def __init__(self, title, release_year, genre, season_number, episode_number, views=0):
+        super().__init__(title, release_year, genre, views)
+        self.season_number = season_number
+        self.episode_number = episode_number
+
+    def format_title(self):
+        return f"{self.title} S{self.season_number:02d}E{self.episode_number:02d}"
+
+    def __str__(self):
+        return f"{self.format_title()} - {self.views} views"
 
 
 if __name__ == "__main__":
