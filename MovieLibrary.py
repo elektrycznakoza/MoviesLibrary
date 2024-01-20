@@ -28,6 +28,11 @@ class Library:
     def search(self, title):
         return [item for item in self.items if title.lower() in item.title.lower()]
 
+    def play(self, item, views_to_add=1):
+        item.views += views_to_add
+        Library.total_views += views_to_add
+        logging.info(f"Played {item.format_title()}. Total views: {Library.total_views}")
+
     def generate_views(self):
         if not self.items:
             print("Biblioteka jest pusta. Dodaj filmy i seriale przed uruchomieniem symulacji.")
@@ -35,7 +40,7 @@ class Library:
 
         item = random.choice(self.items)
         views = random.randint(1, 100)
-        item.play(views_to_add=views)
+        self.play(item, views_to_add=views)
         print(f"Wygenerowano {views} wyświetleń {item.format_title()}. Suma: {Library.total_views}")
         logging.info(f"Wygenerowano {views} wyświetleń {item.format_title()}. Suma: {Library.total_views}")
 
@@ -56,19 +61,13 @@ class Library:
         return sorted_items[:num_titles]
 
 
-class Movie(Library):
+class Movie:
 
     def __init__(self, title, release_year, genre, views=0):
-        super().__init__()
         self.title = title
         self.release_year = release_year
         self.genre = genre
         self.views = views
-
-    def play(self, views_to_add=1):
-        self.views += views_to_add
-        Library.total_views += views_to_add
-        logging.info(f"Played {self.format_title()}. Total views: {Library.total_views}")
 
     def format_title(self):
         return f"{self.title} ({self.release_year})"
