@@ -18,8 +18,8 @@ class Library:
         self.items.append(item)
 
     def get_movies(self):
-        return sorted([item for item in self.items if isinstance(item, Movie)],
-                      key=lambda x: x.format_title())
+        return sorted([item for item in self.items if isinstance(item, Movie) and not isinstance(item, Series)],
+                  key=lambda x: x.format_title())
 
     def get_series(self):
         return sorted([item for item in self.items if isinstance(item, Series)],
@@ -108,6 +108,10 @@ if __name__ == "__main__":
     print("Biblioteka filmów:")
     for item in library.items:
         print(item)
+
+    print("Sprawdzenie wyświetlania filmów:")
+    for movie in library.get_movies():
+        print(movie)
 
     logging.info(f"Suma wyświetleń przed symulacją: {Library.total_views}")
 
