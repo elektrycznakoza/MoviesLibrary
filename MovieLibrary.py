@@ -19,7 +19,7 @@ class Library:
 
     def get_movies(self):
         return sorted([item for item in self.items if isinstance(item, Movie) and not isinstance(item, Series)],
-                  key=lambda x: x.format_title())
+                      key=lambda x: x.format_title())
 
     def get_series(self):
         return sorted([item for item in self.items if isinstance(item, Series)],
@@ -28,11 +28,6 @@ class Library:
     def search(self, title):
         return [item for item in self.items if title.lower() in item.title.lower()]
 
-    def play(self, item, views_to_add=1):
-        item.views += views_to_add
-        Library.total_views += views_to_add
-        logging.info(f"Played {item.format_title()}. Total views: {Library.total_views}")
-
     def generate_views(self):
         if not self.items:
             print("Biblioteka jest pusta. Dodaj filmy i seriale przed uruchomieniem symulacji.")
@@ -40,7 +35,8 @@ class Library:
 
         item = random.choice(self.items)
         views = random.randint(1, 100)
-        self.play(item, views_to_add=views)
+        item.play(views_to_add=views)
+        Library.total_views += views
         print(f"Wygenerowano {views} wyświetleń {item.format_title()}. Suma: {Library.total_views}")
         logging.info(f"Wygenerowano {views} wyświetleń {item.format_title()}. Suma: {Library.total_views}")
 
@@ -74,6 +70,10 @@ class Movie:
 
     def __str__(self):
         return f"{self.format_title()} - {self.views} views"
+    
+    def play(self, views_to_add=1):
+        self.views += views_to_add
+        logging.info(f"Played {self.format_title()}. Total views: {self.views}")
 
 
 class Series(Movie):
