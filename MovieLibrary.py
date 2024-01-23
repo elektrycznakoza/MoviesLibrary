@@ -36,10 +36,10 @@ class Library:
         item = random.choice(self.items)
         views = random.randint(1, 100)
         item.play(views_to_add=views)
-        Library.total_views += views
-        print(f"Wygenerowano {views} wyświetleń {item.format_title()}. Suma: {Library.total_views}")
-        logging.info(f"Wygenerowano {views} wyświetleń {item.format_title()}. Suma: {Library.total_views}")
-
+        self.total_views += views
+        print(f"Wygenerowano {views} wyświetleń {item.format_title()}. Suma: {self.total_views}")
+        logging.info(f"Wygenerowano {views} wyświetleń {item.format_title()}. Suma: {self.total_views}")
+    
     def run_simulation(self, num_iterations):
         for i in range(num_iterations):
             self.generate_views()
